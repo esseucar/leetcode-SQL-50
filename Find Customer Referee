@@ -1,0 +1,4 @@
+select name from Customer where referee_id is null or referee_id != 2 --postgreSql answer
+SELECT name -- mySql answer
+FROM Customer
+WHERE COALESCE(referee_id, 0) != 2;

@@ -1,0 +1,1 @@
+select distinct viewer_id as id from Views M where M.viewer_id=(Select distinct S.author_id from Views S where S.viewer_id=M.author_id) order by viewer_id

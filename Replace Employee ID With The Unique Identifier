@@ -1,0 +1,1 @@
+Select U.unique_id, M.name from EmployeeUNI as U right outer join Employees as M on U.id=M.id

@@ -1,0 +1,1 @@
+select id from Weather as MW where temperature > (select temperature from Weather where id=(MW.id-1))

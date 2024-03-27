@@ -1,0 +1,23 @@
+SELECT 
+    machine_id,
+     ROUND(CAST((SUM(total_timestamp) - start_time) / 2 AS numeric), 3) AS processing_time
+FROM (
+    SELECT 
+        machine_id,
+        SUM(CASE WHEN activity_type = 'start' THEN timestamp ELSE 0 END) AS start_time,
+        SUM(CASE WHEN activity_type <> 'start' THEN timestamp ELSE 0 END) AS total_timestamp
+    FROM Activity
+    GROUP BY machine_id
+) AS subquery
+WHERE total_timestamp > 0
+GROUP BY machine_id, start_time
+ORDER BY machine_id;
+-----------------------------
+SECOND WAY
+-----------------------------
+
+select machine_id,ROUND((CAST(processing_times AS numeric)),3) as processing_time  from 
+(select machine_id, ((summary-strt)/2) as processing_times from (
+    select machine_id,SUM(timestamp) as summary,(
+    SELECT SUM(timestamp) from Activity WHERE activity_type='start' AND machine_id=M.machine_id GROUP BY machine_id,activity_type
+) AS STRT from Activity AS M GROUP BY machine_id,activity_type) where ((summary-strt)/2)> 0 order by machine_id)
